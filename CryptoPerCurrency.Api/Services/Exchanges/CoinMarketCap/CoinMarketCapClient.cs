@@ -5,7 +5,7 @@ using Microsoft.Extensions.Options;
 
 namespace CryptoPerCurrency.Api.Services.Exchanges.CoinMarketCap;
 
-public sealed class CoinMarketCapClient
+public sealed class CoinMarketCapClient : ICoinMarketCapClient
 {
     private readonly HttpClient _httpClient;
     private readonly CoinMarketCapApiSettings _settings;

@@ -13,9 +13,15 @@ public class CryptoRatesJobs : IJob
     private readonly RateProccesor _rateProccesor;
     private readonly CancellationToken _cancelationToken = new CancellationTokenSource().Token;
     private readonly string _symbolsKey = "Symbols";
-    private readonly int _symbolsCacheDurationInMinute = 60;
-    private readonly int _symbolsMaxRank = 100;
-    private readonly int _rateLimiterDelay = 3000;
+    
+    //check for new coins
+    private readonly int _symbolsCacheDurationInMinute = 180; 
+    
+    //top 100 coin
+    private readonly int _symbolsMaxRank = 100; 
+    
+    //if we send all the request in one time, Ratelimiter will activate and reject all the request so we should wait
+    private readonly int _rateLimiterDelay = 3000; 
     
     public CryptoRatesJobs(
         CoinMarketCapClient client, 
@@ -55,6 +61,7 @@ public class CryptoRatesJobs : IJob
 
     private async Task InvokeProcessor(string symbol)
     {
+        //At first it was without delay since i realiside the rate limiter and ip blocker of CoinMarketCap
         await Task.Delay(_rateLimiterDelay);
         await _rateProccesor.ProcessAsync(_cancelationToken, new RateRequest(symbol));
     }
